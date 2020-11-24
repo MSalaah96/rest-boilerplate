@@ -1,0 +1,18 @@
+[
+  {
+    "roles": [
+      "admin"
+    ],
+    "first_name": "Super",
+    "last_name": "Admin",
+    "description": "Super Admin Awy",
+    "translation": [
+      {
+        "_lang": "ar",
+        "first_name": "مشرف",
+        "last_name": "متميز",
+        "description": "مشرف متميز اوي"
+      }
+    ]
+  }
+]
