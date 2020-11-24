@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: api
+    ports:
+      - 8080:8080
+    container_name: api
+    restart: unless-stopped
+    environment:
+      VIRTUAL_HOST: api.MY_API.com
+      LETSENCRYPT_HOST: api.MY_API.com
+      LETSENCRYPT_EMAIL: api@MY_API.com
+
+networks:
+  default:
+    external:
+      name: nginx-proxy
