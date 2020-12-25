@@ -68,7 +68,7 @@ class Server {
     const env = process.env.NODE_ENV || 'development';
 
     _.set(global, 'Api.locales', {});
-    _.set(global, 'Api.params.inDevelopment', env === 'development');
+    _.set(global, 'Api.params.inDevelopment', utils.inDevelopment());
   }
 
   _applyHooks() {

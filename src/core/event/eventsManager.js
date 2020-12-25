@@ -6,14 +6,15 @@ class EventsManager {
     this._eventEmitter = new EventEmitter();
   }
 
-  _validateArgs(channel, topic, callback) {
+  _validateArgs(channel, topic, callbacks) {
     if (channel == null) {
       throw new Error('Channel name is mandatory');
     }
-
-    if (typeof callback !== 'function') {
-      throw new Error('Callback must be a function');
-    }
+    callbacks.forEach((callback) => {
+      if (typeof callback !== 'function') {
+        throw new Error('Callback must be a function');
+      }
+    });
   }
 
   _subscribe(channel, topic, callback) {
@@ -21,7 +22,7 @@ class EventsManager {
     const eventName = `${channel}.${topicName}`;
     if (this._channels[channel] == null) {
       this._channels[channel] = {
-        topics: { [topicName]: [callback] },
+        topics: { [topicName]: [callback] }
       };
     } else if (this._channels[channel].topics[topicName] == null) {
       this._channels[channel].topics[topicName] = [callback];
@@ -36,9 +37,12 @@ class EventsManager {
     this._eventEmitter.addListener(eventName, callback);
   }
 
-  subscribe(channel, topic, callback) {
-    this._validateArgs(channel, topic, callback);
-    this._subscribe(channel, topic, callback);
+  subscribe(channel, topic, callbacks) {
+    if (!Array.isArray(callbacks)) {
+      callbacks = [callbacks];
+    }
+    this._validateArgs(channel, topic, callbacks);
+    callbacks.forEach((callback) => this._subscribe(channel, topic, callback));
   }
 
   /**
@@ -56,9 +60,9 @@ class EventsManager {
     }
 
     // Validate all data before do the subscription
-    subscribers.forEach((s) => this._validateArgs(s.channel, s.topic, s.callback));
+    subscribers.forEach((s) => this._validateArgs(s.channel, s.topic, s.callbacks));
     // Subscribe all
-    subscribers.forEach((s) => this._subscribe(s.channel, s.topic, s.callback));
+    subscribers.forEach((s) => s.callbacks.forEach((c) => this._subscribe(s.channel, s.topic, c)));
   }
 
   unsubscribe(channel, topic, callback) {

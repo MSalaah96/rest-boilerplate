@@ -1,7 +1,7 @@
 class Utils {
   static inDevelopment() {
     const env = process.env.NODE_ENV || 'development';
-    return env === 'development';
+    return env === 'development' || env === 'local';
   }
 
   static isObject(obj) {

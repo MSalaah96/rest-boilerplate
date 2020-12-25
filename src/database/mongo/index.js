@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 const mongoose = require('mongoose');
-const Initialization = require('./init');
 const DB_RETRIES = 30;
 const DB_WAIT_TIME = 2000;
 
@@ -49,11 +48,7 @@ class Database {
         );
       });
       // Only apply index & configurations first time
-      const collections = await this.getCollections();
-      if (collections && collections.length === 0) {
-        await this.ensureIndexes();
-        await this.initializePreConfig();
-      }
+      await this.ensureIndexes();
     } catch (err) {
       if (this._retries >= DB_RETRIES) {
         console.log('Waiting timeout');
@@ -79,6 +74,10 @@ class Database {
 
     // Register models
     await this._registerModels();
+    const collections = await this.getCollections();
+    if (collections && collections.length === 0) {
+      await this.initializePreConfig();
+    }
 
     // Connect to mongodb
     this._config = dbConfig;
@@ -90,7 +89,7 @@ class Database {
       bufferMaxEntries: 0,
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      useFindAndModify: false,
+      useFindAndModify: false
     };
 
     await this._connect(uri, options);
@@ -121,7 +120,6 @@ class Database {
       if (connections && connections.length > 0) {
         const { db } = connections[0];
         const collections = await db.listCollections().toArray();
-
         return collections;
       }
 
@@ -142,7 +140,7 @@ class Database {
   }
 
   async initializePreConfig() {
-    await Initialization.init();
+    await require('./init').init();
   }
 }
 
