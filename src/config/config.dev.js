@@ -10,12 +10,12 @@ module.exports = {
     contextStoreName: 'api',
   },
   storage: {
-    accessKey: 'D6INXA6HFGK5V7K3NIHF',
-    secretKey: 'uYXInLjKo0p4uVF/Y08nGvVsm7QP4OdRlx+AALDr3iM',
-    baseUrl: 'digitaloceanspaces.com',
-    bucket: 'vio',
-    region: 'fra1',
-    folder: 'dev',
+    accessKey: '',
+    secretKey: '',
+    baseUrl: '',
+    bucket: '',
+    region: '',
+    folder: '',
   },
   common: {
     pageSize: 10,
